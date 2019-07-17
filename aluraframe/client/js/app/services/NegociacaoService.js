@@ -2,6 +2,7 @@ class NegociacaoService{
     constructor(lista, msg){
         this.msg = msg;
         this.lista = lista;
+        this._mensagemView = new MensagemView(document.querySelector('#mensagemView'));
     }
 
     obterNegociacoesDaSemana(){
@@ -32,7 +33,8 @@ class NegociacaoService{
                         }));
                     }
                     else{
-                        reject(this.msg.texto = "Não foi possível obter as negociações do servidor!");
+                        reject(this.msg.texto = "Não foi possível obter as negociações da semana!");
+                        this._mensagemView.update(this.msg);
                     }
                 }
             };
@@ -67,7 +69,8 @@ class NegociacaoService{
                         }));
                     }
                     else{
-                        reject(this.msg.texto = "Não foi possível obter as negociações do servidor!");
+                        reject(this.msg.texto = "Não foi possível obter as negociações da semana anterior!");
+                        this._mensagemView.update(this.msg);
                     }
                 }
             };
@@ -103,7 +106,8 @@ class NegociacaoService{
                         }));
                     }
                     else{
-                        reject(this.msg.texto = "Não foi possível obter as negociações do servidor!");
+                        reject(this.msg.texto = "Não foi possível obter as negociações da semana retrasada!");
+                        this._mensagemView.update(this.msg);
                     }
                 }
             };
