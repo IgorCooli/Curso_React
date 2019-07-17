@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Aprendendo IndexedDB</title>
+</head>
+<body>
+    <script src = "js/app/models/Negociacao.js"></script>
+    <script src = "js/app/controllers/NegociacaoController.js"></script>
+    <script src="js/app/helpers/DateHelper.js"></script>
+    <script src="js/app/models/ListaNegociacoes.js"></script>
+    <script src="js/app/views/View.js"></script>
+    <script src="js/app/views/NegociacoesView.js"></script>
+    <script src="js/app/models/Mensagem.js"></script>
+    <script src="js/app/views/MensagemView.js"></script>
+    <script src="js/app/services/ProxyFactory.js"></script>
+    <script src="js/app/services/NegociacaoService.js"></script>
+    <script src="js/app/services/ConnectionFactory.js"></script>
+    <script>
+
+        let connection;
+        //Criando banco (nome do banco, versão do indexedDB)
+        //a versão serve para fazermos alterações no banco, pois uma vez criado
+        //não podemos mais alterá-lo, então mudamos a versão e criamos um novo banco
+        let openRequest = window.indexedDB.open('aluraframe', 7);
+        
+        openRequest.onupgradeneeded = (e)=>{
+            console.log("Cria ou altera um banco já existente!");
+            let myConnection = e.target.result;
+            if(myConnection.objectStoreNames.contains('negociacoes')){
+                myConnection.deleteObjectStore('negociacoes');
+            }
+            myConnection.createObjectStore('negociacoes', { autoIncrement: true });
+        };
+        openRequest.onsuccess = (e)=>{
+            console.log("Conexão obtida com sucesso!");
+            connection = e.target.result;
+        };
+        openRequest.onerror = (e)=>{
+            console.log(e.target.error);
+        };
+
+        function adiciona(){
+
+            //primeiro criamos uma transação para um object store(objeto, tipo de acesso)
+            let transaction = connection.transaction(['negociacoes'], 'readwrite');
+            //atraves da transação criada, obtemos o acesso a operações de persistência
+            let store = transaction.objectStore('negociacoes');
+
+            let negociacao = new Negociacao(new Date(), 1, 200);
+
+            let request = store.add(negociacao);
+
+            request.onsuccess = e=>{
+                console.log('Negociação incluída com sucesso!');
+            };
+            request.onerror = e=>{
+                console.log("Não foi possível incluir a negociação!");
+            }
+
+        }
+
+        function listaTodos(){
+            let transaction = connection.transaction(['negociacoes'], 'readwrite');
+            let store = transaction.objectStore('negociacoes');
+            let negociacoes = new ListaNegociacoes();
+            let cursor = store.openCursor();
+
+            cursor.onsuccess = e=>{
+                let atual = e.target.result;
+                if(atual){
+                    var dado = atual.value;
+                    negociacoes.adiciona(new Negociacao(dado._data, dado._quantidade, dado._valor));
+                    atual.continue();
+                }
+                else{
+                    console.log(negociacoes);
+                }
+            }
+            cursor.onerror = e =>{
+                console.log(e.target.error.name);
+            }
+        }
+
+        ConnectionFactory.getConnection()
+            .then(connection =>{
+                //a conexão deve ser a mesma utilizada anteriormente
+            });
+        //a) getConnection vai ser um método estático
+        //b) getConnection vai retornar uma promise
+        //c) não importa o número de vezes que eu chamar o método estático, a conexão deve ser a mesma
+        //d) o programador não pode chamar close diretamente. Ela só pode ser fechada pela própria ConnectionFactory
+
+    </script>
+</body>
+</html>
