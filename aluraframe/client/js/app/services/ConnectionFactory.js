@@ -1,6 +1,7 @@
 var stores = ['negociacoes'];
-var version = 4;
+var version = 1;
 var dbName = 'aluraframe';
+var connection = null;
 
 class ConnectionFactory{
     constructor(){
@@ -14,11 +15,15 @@ class ConnectionFactory{
                 ConnectionFactory._createStores(e.target.result);
             };
             openRequest.onsuccess = e =>{
-                resolve(e.target.result);
+                //verificando se já existe uma connection. Caso exista, ele utiliza ela mesma, e não cria uma nova.
+                if(!connection) {
+                    connection = e.target.result;
+                }
+                resolve(connection);
             };
             openRequest.onerror = e =>{
                 console.log(e.target.error);
-                reject(e.target.error.name);
+                reject(e.target.error);
             };
         });
     }
@@ -27,5 +32,10 @@ class ConnectionFactory{
             if(connection.objectStoreNames.contains(store)) connection.deleteObjectStore(store);
             connection.createObjectStore(store, { autoIncrement : true })
         })
+    }
+    static closeConnection(){
+        if(connection){
+            connection.close();
+        }
     }
 }

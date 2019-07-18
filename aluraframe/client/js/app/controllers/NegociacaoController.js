@@ -26,13 +26,26 @@ class NegociacaoController{
 
     adiciona(event){
         event.preventDefault();
-        this._listaNegociacoes.adiciona(this._criaNegociacao());
-        //this._listaNegociacoes.negociacoes.push(this._criaNegociacao());     Não se pode usar usada pois o método está blindado na classe ListaNegociacoes
-        this._limpaFormulario();
-        console.log(this._listaNegociacoes.negociacoes);
-        this._negociacoesView.update(this._listaNegociacoes);
-        this._mensagem.texto = "Negociação adicionada com sucesso!";
-        this._mensagemView.update(this._mensagem);
+        ConnectionFactory
+            .getConnection()
+            .then(connection=>{
+                let negociacao = this._criaNegociacao();
+                new NegociacaoDao(connection)
+                .adiciona(negociacao)
+                .then(()=>{
+                    //this._listaNegociacoes.negociacoes.push(this._criaNegociacao());     Não se pode usar usada pois o método está blindado na classe ListaNegociacoes
+                    this._listaNegociacoes.adiciona(this._criaNegociacao());
+                    this._mensagem.texto = "Negociação adicionada com sucesso!";
+                    this._limpaFormulario();
+                    console.log(this._listaNegociacoes.negociacoes);
+                    this._negociacoesView.update(this._listaNegociacoes);
+                    this._mensagemView.update(this._mensagem);
+                })
+            })
+            .catch(erro => {
+                this._mensagem.texto = erro;
+                this._mensagemView.update(this._mensagem);
+            })
     }
 
     //Importando dados do serviço!!!
@@ -45,6 +58,9 @@ class NegociacaoController{
     }
 
     apaga(){
+        if(!ListaNegociacoes){
+            throw new Error('Nenhuma negociação à ser apagada!')
+        }
         this._listaNegociacoes.esvazia();
         this._negociacoesView.update(this._listaNegociacoes);
         this._mensagem.texto = "Negociações apagadas com sucesso!";
@@ -52,7 +68,7 @@ class NegociacaoController{
     }
 
     _criaNegociacao(){
-        return new Negociacao(DateHelper.textoParaData(this._inputData.value), this._inputQuantidade.value, this._inputValor.value);
+        return new Negociacao(DateHelper.textoParaData(this._inputData.value), parseInt(this._inputQuantidade.value), parseFloat(this._inputValor.value));
     }
 
     _limpaFormulario(){
