@@ -22,6 +22,19 @@ class NegociacaoController{
         })
         //this._mensagem = new Mensagem();
         this._mensagemView = new MensagemView($('#mensagemView'));
+
+
+        ConnectionFactory.getConnection()
+            .then(connection=>{
+                new NegociacaoDao(connection)
+                    .listaTodos()
+                        .then(negociacoes=>{
+                            negociacoes.forEach(negociacao => {
+                                this._listaNegociacoes.adiciona(negociacao);
+                            });
+                        })
+            })
+            .catch(erro=>this._mensagem = 'Não foi possível obter as negociações. Erro: ' + erro.name)
     }
 
     adiciona(event){
@@ -58,6 +71,9 @@ class NegociacaoController{
     }
 
     apaga(){
+        ConnectionFactory.getConnection()
+            .then(connection=> new NegociacaoDao(connection))
+            .then(dao => dao.apagaTodos())
         if(!ListaNegociacoes){
             throw new Error('Nenhuma negociação à ser apagada!')
         }

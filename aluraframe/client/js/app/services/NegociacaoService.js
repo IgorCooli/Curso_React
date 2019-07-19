@@ -27,6 +27,7 @@ class NegociacaoService{
                     if(xhr.status == 200){
                         console.log("Obtendo as negociações do servidor.");
                         console.log(JSON.parse(xhr.responseText));
+                        this._salvaBanco(JSON.parse(xhr.responseText));
                         resolve(JSON.parse(xhr.responseText).forEach((item) => {
                             let n = new Negociacao(item.data, item.quantidade, item.valor);
                             this.lista.adiciona(n);
@@ -63,6 +64,7 @@ class NegociacaoService{
                     if(xhr.status == 200){
                         console.log("Obtendo as negociações do servidor.");
                         console.log(JSON.parse(xhr.responseText));
+                        this._salvaBanco(JSON.parse(xhr.responseText));
                         resolve(JSON.parse(xhr.responseText).forEach((item) => {
                             let n = new Negociacao(item.data, item.quantidade, item.valor);
                             this.lista.adiciona(n);
@@ -100,6 +102,7 @@ class NegociacaoService{
                     if(xhr.status == 200){
                         console.log("Obtendo as negociações do servidor.");
                         console.log(JSON.parse(xhr.responseText));
+                        this._salvaBanco(JSON.parse(xhr.responseText));
                         resolve(JSON.parse(xhr.responseText).forEach((item) => {
                             let n = new Negociacao(item.data, item.quantidade, item.valor);
                             this.lista.adiciona(n);
@@ -114,5 +117,14 @@ class NegociacaoService{
             
             xhr.send();
         });
+    }
+
+    _salvaBanco(json){
+        ConnectionFactory.getConnection()
+            .then(connection=>{
+                json.forEach(e=>{
+                    new NegociacaoDao(connection).adiciona(e);
+                })
+            })
     }
 }
