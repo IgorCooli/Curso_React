@@ -54,7 +54,7 @@ export class NegociacaoService{
                                 listaNova.push(e);
                             }
                             else{
-                                console.log("Negociação existente!!!")
+                                console.log("Negociação existente!!")
                             }
                         })
                         resolve(listaNova.forEach((item) => {
@@ -104,7 +104,7 @@ export class NegociacaoService{
                                 listaNova.push(e);
                             }
                             else{
-                                console.log("Negociação existente!!!")
+                                console.log("Negociação existente!!")
                             }
                         })
                         resolve(listaNova.forEach((item) => {
@@ -155,7 +155,7 @@ export class NegociacaoService{
                                 listaNova.push(e);
                             }
                             else{
-                                console.log("Negociação existente!!!")
+                                console.log("Negociação existente!!")
                             }
                         })
                         resolve(listaNova.forEach((item) => {
