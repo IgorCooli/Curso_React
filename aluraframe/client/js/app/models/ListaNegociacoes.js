@@ -15,7 +15,6 @@ class ListaNegociacoes{
         /*Dessa forma, não é possível adicionar negociações com o .push, 
         pois este método retorna uma cópia da lista de negociações que está salva*/
         return [].concat(this._negociacoes);
-        
     }
 
     volumeTotal(){

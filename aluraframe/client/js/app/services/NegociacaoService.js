@@ -6,6 +6,8 @@ class NegociacaoService{
     }
 
     obterNegociacoesDaSemana(){
+        let listaExistente = [];
+        let listaNova = [];
 
         return new Promise((resolve, reject)=>{
             let xhr = new XMLHttpRequest();
@@ -25,13 +27,34 @@ class NegociacaoService{
                     //Ainda não podemos confiar no resultado dessa requisição, pois o servidor pode me devolver uma mensagem de erro que seja aceita
                     //mais uma condição para saber se a resposta é "BOA":
                     if(xhr.status == 200){
+                        /**
+                         * 
+                         * console.log("Obtendo as negociações do servidor.");
+                            this._salvaBanco(JSON.parse(xhr.responseText));
+                            listaExistente = this._geraString()
+                            resolve(JSON.parse(xhr.responseText).forEach((item) => {
+                            let n = new Negociacao(item.data, item.quantidade, item.valor);
+                            this.lista.adiciona(n);
+                            }));
+                         * 
+                         */
                         console.log("Obtendo as negociações do servidor.");
-                        console.log(JSON.parse(xhr.responseText));
-                        this._salvaBanco(JSON.parse(xhr.responseText));
-                        resolve(JSON.parse(xhr.responseText).forEach((item) => {
+                        this.lista.negociacoes.forEach(e=>{
+                            listaExistente.push(this._geraString(e));
+                        })
+                        JSON.parse(xhr.responseText).forEach(e=>{
+                            if(listaExistente.indexOf(this._geraString(e)) == -1){
+                                listaNova.push(e);
+                            }
+                            else{
+                                console.log("Negociação existente!!!")
+                            }
+                        })
+                        resolve(listaNova.forEach((item) => {
                             let n = new Negociacao(item.data, item.quantidade, item.valor);
                             this.lista.adiciona(n);
                         }));
+                        this._salvaBanco(listaNova);
                     }
                     else{
                         reject(this.msg.texto = "Não foi possível obter as negociações da semana!");
@@ -44,6 +67,9 @@ class NegociacaoService{
         });
     }
     obterNegociacoesDaAnterior(){
+        let listaExistente = [];
+        let listaNova = [];
+
         return new Promise((resolve, reject)=>{
             let xhr = new XMLHttpRequest();
             xhr.open('GET', 'negociacoes/anterior');
@@ -63,12 +89,22 @@ class NegociacaoService{
                     //mais uma condição para saber se a resposta é "BOA":
                     if(xhr.status == 200){
                         console.log("Obtendo as negociações do servidor.");
-                        console.log(JSON.parse(xhr.responseText));
-                        this._salvaBanco(JSON.parse(xhr.responseText));
-                        resolve(JSON.parse(xhr.responseText).forEach((item) => {
+                        this.lista.negociacoes.forEach(e=>{
+                            listaExistente.push(this._geraString(e));
+                        })
+                        JSON.parse(xhr.responseText).forEach(e=>{
+                            if(listaExistente.indexOf(this._geraString(e)) == -1){
+                                listaNova.push(e);
+                            }
+                            else{
+                                console.log("Negociação existente!!!")
+                            }
+                        })
+                        resolve(listaNova.forEach((item) => {
                             let n = new Negociacao(item.data, item.quantidade, item.valor);
                             this.lista.adiciona(n);
                         }));
+                        this._salvaBanco(listaNova);
                     }
                     else{
                         reject(this.msg.texto = "Não foi possível obter as negociações da semana anterior!");
@@ -82,6 +118,9 @@ class NegociacaoService{
     }
 
     obterNegociacoesDaRetrasada(){
+        let listaExistente = [];
+        let listaNova = [];
+        
         return new Promise((resolve, reject)=>{
             let xhr = new XMLHttpRequest();
             xhr.open('GET', 'negociacoes/retrasada');
@@ -101,12 +140,22 @@ class NegociacaoService{
                     //mais uma condição para saber se a resposta é "BOA":
                     if(xhr.status == 200){
                         console.log("Obtendo as negociações do servidor.");
-                        console.log(JSON.parse(xhr.responseText));
-                        this._salvaBanco(JSON.parse(xhr.responseText));
-                        resolve(JSON.parse(xhr.responseText).forEach((item) => {
+                        this.lista.negociacoes.forEach(e=>{
+                            listaExistente.push(this._geraString(e));
+                        })
+                        JSON.parse(xhr.responseText).forEach(e=>{
+                            if(listaExistente.indexOf(this._geraString(e)) == -1){
+                                listaNova.push(e);
+                            }
+                            else{
+                                console.log("Negociação existente!!!")
+                            }
+                        })
+                        resolve(listaNova.forEach((item) => {
                             let n = new Negociacao(item.data, item.quantidade, item.valor);
                             this.lista.adiciona(n);
                         }));
+                        this._salvaBanco(listaNova);
                     }
                     else{
                         reject(this.msg.texto = "Não foi possível obter as negociações da semana retrasada!");
@@ -126,5 +175,10 @@ class NegociacaoService{
                     new NegociacaoDao(connection).adiciona(e);
                 })
             })
+    }
+
+    _geraString(obj){
+        let data = new Date(obj.data);
+        return (data.getDate() + '/0' + (data.getMonth()+1) + '/' + data.getFullYear() + ', ' + obj.quantidade + ', ' + obj.valor);
     }
 }

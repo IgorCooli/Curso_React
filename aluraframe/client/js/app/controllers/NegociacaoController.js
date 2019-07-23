@@ -10,7 +10,7 @@ class NegociacaoController{
         this._inputValor = $('#valor');
 
         let self = this;
-        this._listaNegociacoes = ProxyFactory.createProxy(new ListaNegociacoes(), ['adiciona', 'esvazia'], (model)=>{
+        this._listaNegociacoes = ProxyFactory.createProxy(new ListaNegociacoes(), ['adiciona', 'esvazia', 'negociacoes'], (model)=>{
             this._negociacoesView.update(model);
         })
 
