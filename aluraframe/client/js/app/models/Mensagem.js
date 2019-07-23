@@ -1,4 +1,4 @@
-class Mensagem{
+export class Mensagem{
     //ES6 permite que voce passe um parâmetro já com um valor, ou seja,
     //Caso eu não passe uma string para o construtor, ele inicializa como 'vazio'
     constructor(texto = ''){

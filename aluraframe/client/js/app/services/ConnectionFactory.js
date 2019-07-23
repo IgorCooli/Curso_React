@@ -1,9 +1,11 @@
-var stores = ['negociacoes'];
-var version = 1;
-var dbName = 'aluraframe';
-var connection = null;
 
-class ConnectionFactory{
+
+let stores = ['negociacoes'];
+let version = 1;
+let dbName = 'aluraframe';
+let connection = null;
+
+export class ConnectionFactory{
     constructor(){
         throw new Error('Não é possível criar instâncias de ConnectionFactory!');
     }

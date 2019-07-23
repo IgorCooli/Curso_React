@@ -1,5 +1,12 @@
-class NegociacaoService{
+import { HttpService } from '../services/HttpService';
+import { ConnectionFactory } from './ConnectionFactory';
+import {Negociacao} from '../models/Negociacao';
+import { NegociacaoDao } from './../dao/NegociacaoDao';
+import { MensagemView } from './../views/MensagemView';
+
+export class NegociacaoService{
     constructor(lista, msg){
+        
         this.msg = msg;
         this.lista = lista;
         this._mensagemView = new MensagemView(document.querySelector('#mensagemView'));
@@ -177,6 +184,10 @@ class NegociacaoService{
             })
     }
 
+    /**
+     * Transformando os objetos em strings para que possamos comparar com as negociações exisitentes,
+     * Não salvando dubplicatas no banco.
+     */
     _geraString(obj){
         let data = new Date(obj.data);
         return (data.getDate() + '/0' + (data.getMonth()+1) + '/' + data.getFullYear() + ', ' + obj.quantidade + ', ' + obj.valor);

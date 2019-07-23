@@ -1,4 +1,6 @@
-class DateHelper{
+
+
+export class DateHelper{
 
 
     constructor(){

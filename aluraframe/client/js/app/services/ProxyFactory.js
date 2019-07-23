@@ -1,4 +1,6 @@
-class ProxyFactory{
+
+
+export class ProxyFactory{
     //props é uma array de propriedades que eu quero manipular
     //acao -> ex: self._negociacoesView.update(target);
     static createProxy(objeto, props, acao){

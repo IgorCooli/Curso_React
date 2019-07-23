@@ -1,3 +1,11 @@
+import {ListaNegociacoes} from '../models/ListaNegociacoes';
+import {Negociacao} from '../models/Negociacao';
+import {Mensagem} from '../models/Mensagem';
+import {NegociacoesView} from '../views/NegociacoesView';
+import {MensagemView} from '../views/MensagemView';
+import {NegociacaoService} from '../services/NegociacaoService';
+import {DateHelper} from '../helpers/DateHelper';
+
 class NegociacaoController{
 
     constructor(){
@@ -63,7 +71,14 @@ class NegociacaoController{
 
     //Importando dados do serviço!!!
     importaNegociacoes(){
-        let service = new NegociacaoService(this._listaNegociacoes, this._mensagem);
+    import { ListaNegociacoes } from './../models/ListaNegociacoes';
+    import { Negociacao } from './../models/Negociacao';
+let import { Mensagem } from './../models/Mensagem';
+servimport { NegociacoesView } from './../views/NegociacoesView';
+ice import { MensagemView } from './../views/MensagemView';
+= neimport { NegociacaoService } from './../services/NegociacaoService';
+w Neimport { DateHelper } from './../helpers/DateHelper';
+gociacaoService(this._listaNegociacoes, this._mensagem);
         
         service.obterNegociacoesDaSemana()
         .then(service.obterNegociacoesDaAnterior())
