@@ -65,9 +65,10 @@ class NegociacaoController{
     importaNegociacoes(){
         let service = new NegociacaoService(this._listaNegociacoes, this._mensagem);
         
-        service.obterNegociacoesDaSemana()
-        .then(service.obterNegociacoesDaAnterior())
-        .then(service.obterNegociacoesDaRetrasada());
+        service
+            .obterNegociacoesDaSemana()
+            .then(service.obterNegociacoesDaAnterior())
+            .then(service.obterNegociacoesDaRetrasada());
     }
 
     apaga(){

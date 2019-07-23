@@ -48,6 +48,8 @@ class NegociacaoService{
                             }
                             else{
                                 console.log("Negociação existente!!!")
+                                this.msg.texto = "Negociações passadas já foram registradas!"
+                                this._mensagemView.update(this.msg);
                             }
                         })
                         resolve(listaNova.forEach((item) => {
@@ -98,6 +100,8 @@ class NegociacaoService{
                             }
                             else{
                                 console.log("Negociação existente!!!")
+                                this.msg.texto = "Negociações passadas já foram registradas!"
+                                this._mensagemView.update(this.msg);
                             }
                         })
                         resolve(listaNova.forEach((item) => {
@@ -149,6 +153,8 @@ class NegociacaoService{
                             }
                             else{
                                 console.log("Negociação existente!!!")
+                                this.msg.texto = "Negociações passadas já foram registradas!"
+                                this._mensagemView.update(this.msg);
                             }
                         })
                         resolve(listaNova.forEach((item) => {
